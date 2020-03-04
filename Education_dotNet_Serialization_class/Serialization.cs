@@ -13,46 +13,56 @@ namespace Education_dotNet_Serialization_class
 {
     class Serialization   
     {
-       
+        const string relativePath = "Serialization";
         static void Main(String[] args) {
 
-            Order order = new Order(4,5.5m);
+            string baseFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appStorageFolder = Path.Combine(baseFolder, "Education_dotNet_Serialization_class");
+            string fullPath = Path.Combine(appStorageFolder, relativePath);
+            Directory.CreateDirectory(fullPath);
+            
+             Order order = new Order(4, 5.5m);
 
             //BinaryFormatter
 
-            /*FileStream fsc = new FileStream("d:\\testSR1.bin", FileMode.Create, FileAccess.Write, FileShare.None);
-            BinaryFormatter binaryFormatter = new BinaryFormatter();            
-            binaryFormatter.Serialize(fsc, order);
-            fsc.Close();
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
 
-            FileStream fsr = File.OpenRead("d:\\testSR1.bin");
-            BinaryFormatter binaryFormatter1 = new BinaryFormatter();
-            Order neworder = (Order)binaryFormatter1.Deserialize(fsr);
-            fsr.Close();
+            using (FileStream fstreamCreateFile = new FileStream(Path.Combine(fullPath, "serialization.bin"), FileMode.Create, FileAccess.Write, FileShare.None))
+            {
 
-           Console.WriteLine("Count: {0}",neworder.Count);
-           Console.WriteLine("Price: {0}", neworder.Price);
-           Console.WriteLine("Total Price: {0}", neworder.TotalPrice);
-           Console.ReadKey();*/
+                binaryFormatter.Serialize(fstreamCreateFile, order);
+            }
+
+            using (FileStream fstreamReadFile = File.OpenRead(Path.Combine(fullPath, "serialization.bin")))
+            {
+                Order neworder = (Order)binaryFormatter.Deserialize(fstreamReadFile);
+                
+                Console.WriteLine($"Count: {order.Count}");
+                Console.WriteLine($"Price: {order.Price}");
+                Console.WriteLine($"Total Price: {order.TotalPrice}");
+                Console.ReadKey();   
+            }
 
             //XMLSerializer
 
-            FileStream fsc = new FileStream("d:\\testSR.xml", FileMode.Create, FileAccess.Write, FileShare.None);
-            XmlSerializer xml = new XmlSerializer(typeof(Order));
-            xml.Serialize(fsc, order);
-            fsc.Close();
+           /* XmlSerializer xmlSerializer = new XmlSerializer(typeof(Order));
+            using (FileStream fstreamCreateFile = new FileStream(Path.Combine(fullPath, "serialization.xml"), FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                xmlSerializer.Serialize(fstreamCreateFile, order);
+            }
 
-            FileStream fsr = File.OpenRead("d:\\testSR.xml");
-            XmlSerializer xml1 = new XmlSerializer(typeof(Order));
-            xml.Deserialize(fsr);
-            fsr.Close();
+            
+            using (FileStream fstreamReadFile = File.OpenRead(Path.Combine(fullPath, "serialization.xml")))
+            {
 
-            Console.WriteLine("Count: {0}",order.Count);
-            Console.WriteLine("Price: {0}", order.Price);
-            Console.WriteLine("Total Price: {0}", order.TotalPrice);
-            Console.ReadKey();
+                xmlSerializer.Deserialize(fstreamReadFile);
+            }
 
-           
+            Console.WriteLine($"Count: {order.Count}");
+            Console.WriteLine($"Price: {order.Price}");
+            Console.WriteLine($"Total Price: {order.TotalPrice}");
+            Console.ReadKey();            */
+
         }
 
     }
