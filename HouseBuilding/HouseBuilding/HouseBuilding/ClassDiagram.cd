@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="HouseBuilding.Individual" Collapsed="true">
+    <Position X="7" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAIAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Individual.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseBuilding.Industrial" Collapsed="true">
+    <Position X="4.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAEAAAAAACAAAAIAAIAAAEAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Industrial.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="Material" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.675" />
+  </Class>
+  <Class Name="HouseBuilding.Multistorey" Collapsed="true">
+    <Position X="9.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAACAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Multistorey.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseBuilding.Residential" Collapsed="true">
+    <Position X="9" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAIAACAAAAIAAIAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Residential.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="Material" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.667" />
+  </Class>
+  <Class Name="HouseBuilding.Factory" Collapsed="true">
+    <Position X="4.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Factory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="HouseBuilding.IBuilding" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAIAAIAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>IBuilding.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="HouseBuilding.Material" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IBuilding.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
