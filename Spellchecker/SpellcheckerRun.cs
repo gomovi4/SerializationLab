@@ -55,17 +55,17 @@ namespace Spellchecker
             
             FileReader fileReader = new FileReader(fileComments,locker,fullPathForFile);
             
-            Thread th1 = new Thread(fileReader.ReadFile);
-            th1.Name = "Comments reader";
-            th1.Start();
-            th1.Join(1200);
+            Thread  readerThread = new Thread(fileReader.ReadFile);
+            readerThread.Name = "Comments reader";
+            readerThread.Start();
+            readerThread.Join(1200);
             
             SpellingChecker spellingChecker = new SpellingChecker(fileComments, locker, fullPathForDictionary);
             
-            Thread th2 = new Thread(spellingChecker.CheckSpelling);
-            th2.Name = "Spelling checker";
-            th2.Start();
-            th2.Join(1000);
+            Thread checkThread = new Thread(spellingChecker.CheckSpelling);
+            checkThread.Name = "Spelling checker";
+            checkThread.Start();
+            checkThread.Join(1000);
 
         }
 
