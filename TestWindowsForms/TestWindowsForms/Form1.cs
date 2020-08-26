@@ -30,7 +30,7 @@ namespace TestWindowsForms
         public Form1(GetTextMessage getTextMessage)
         {
             InitializeComponent();
-            getTextMessage += this.updateTextBox;
+            getTextMessage += this.updateTextBox; 
             this.delegateForUpdatingText = getTextMessage;
         }
 

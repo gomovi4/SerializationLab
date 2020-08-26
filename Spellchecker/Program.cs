@@ -14,17 +14,10 @@ namespace Spellchecker
         static void Main(string[] args)
         {
 
-            Spellchecker spellchecker = new Spellchecker();
-            spellchecker.LaunchUtility();
-           Thread th1 = new Thread(spellchecker.ReadFile);
-           th1.Start();
-           th1.Join(1200);
-            
-           Thread th2 = new Thread(spellchecker.CheckSpelling);
-           th2.Start();
-           th2.Join(1000);
+            SpellcheckerRun spellcheckerRun = new SpellcheckerRun();
+            spellcheckerRun.LaunchUtility();
 
-            }
-        
+        }
+
     }
 }
