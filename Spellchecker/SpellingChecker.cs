@@ -7,6 +7,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using System.Threading;
+using System.Linq;
 using NLog;
 
 namespace Spellchecker
@@ -17,18 +18,25 @@ namespace Spellchecker
         private object locker { get; set; }
         private List<string> fileComments { get; set; }
         private Logger logger { get; set; }
+        private AutoResetEvent waitHandleForSpellingChecker { get; set; }
+        private AutoResetEvent waitHandleForFileReader { get; set; }
 
-        public SpellingChecker(List<string> listOfCommentsfromFile, object locker, string dictionaryPath)
+
+
+        public SpellingChecker(List<string> listOfCommentsfromFile, AutoResetEvent waitHandleForSpellingChecker, AutoResetEvent waitHandleForFileReader, string dictionaryPath)
          {
             fileComments = listOfCommentsfromFile;
-            this.locker = locker;
+            this.waitHandleForSpellingChecker = waitHandleForSpellingChecker;
+            this.waitHandleForFileReader = waitHandleForFileReader;
             fullPathForDictionary = dictionaryPath;
+            
         }
         public void CheckSpelling()
         {
-            List<string> dictionaryWords = new List<string>();
-            int errorCounter = 0;
+            ICollection<string> dictionaryWords = new List<string>();
+            
             logger = LogManager.GetCurrentClassLogger();
+            
 
             using (StreamReader streamReader = new StreamReader(fullPathForDictionary))
             {
@@ -37,46 +45,48 @@ namespace Spellchecker
                     dictionaryWords.Add(streamReader.ReadLine());
                 }
             }
+            Thread currentThread = Thread.CurrentThread;
+            
+            waitHandleForSpellingChecker.WaitOne();
+            
+                for (int i=0;i<fileComments.Count; i++)
+                 {
+                        bool isWordCorrect = false;
+                        string wordFromLine = removeWordPosition(fileComments[i]);
+                        string wordFromFileinLowCase = wordFromLine.ToLower();
 
-            lock (locker)
-            {
-                foreach (string wordFromFileComments in fileComments)
-                {
+                        logger.Debug($"\"{fileComments[i]}\" is checking for spelling by \"{currentThread.Name}\"");
 
                     foreach (string wordFromDictionary in dictionaryWords)
                     {
-                        if (wordFromFileComments.Length == wordFromDictionary.Length)
+                   
+                        string wordFromDictionaryinLowCase = wordFromDictionary.ToLower();
+                    
+                        if (wordFromFileinLowCase == wordFromDictionaryinLowCase)
                         {
-
-                            Thread currentThread = Thread.CurrentThread;
-                            logger.Debug($"\"{wordFromFileComments}\" is checking for spelling by \"{currentThread.Name}\"");
-                            string wordFromFileinLowCase = wordFromFileComments.ToLower();
-                            string wordFromDictionaryinLowCase = wordFromDictionary.ToLower();
-                            errorCounter = 0;
-                            char[] wordFromFileByLetters = wordFromFileinLowCase.ToCharArray();
-                            char[] wordFromDictionaryByLetters = wordFromDictionaryinLowCase.ToCharArray();
-                            
-                            for (int index = 0; index < wordFromFileByLetters.Length; index++)
-                            {
-                                if (wordFromFileByLetters[index] != wordFromDictionaryByLetters[index])
-                                {
-                                    errorCounter++;
-                                }
-                            }
-                            if (wordFromFileComments.Length <= 3 && errorCounter == 1)
-                            {
-                                Console.WriteLine($"The following word is not correct: {wordFromFileComments}");
-                            }
-                            else if (wordFromFileComments.Length > 3 && errorCounter <= 2 && errorCounter > 0)
-                            {
-                                Console.WriteLine($"The following word is not correct: {wordFromFileComments}");
-                            }
+                           isWordCorrect = true;
+                            break;
                         }
+                
                     }
+
+                if (!isWordCorrect)
+                {
+                    logger.Debug($"\"{fileComments[i]}\" word is incorrect. Verified by \"{currentThread.Name}\"");
+                    Console.WriteLine($"Spelling error is found: {fileComments[i]}");
                 }
+                
+                waitHandleForFileReader.Set();
+                waitHandleForSpellingChecker.WaitOne();
             }
+
+        }
+
+        //method to get word from the list without position in the file
+        string removeWordPosition(string wordWithPosition)
+        {
+            int positionFrom = wordWithPosition.LastIndexOf(" ") + 1;
+            return wordWithPosition.Substring(positionFrom);
         }
     }
-
-
 }
