@@ -24,7 +24,7 @@ namespace Spellchecker
         private string[] userData { get; set; }
 
 
-        //method for utility launch
+        //method to launch utility
         public void LaunchUtility()
         {
 
